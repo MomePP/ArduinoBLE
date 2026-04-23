@@ -91,7 +91,7 @@ static int cyw4343_download_firmware(const struct device *uart) {
   }
 
   // Load the firmware image.
-  for (size_t offset=0; offset < brcm_patch_ram_length;) {
+  for (int offset=0; offset < brcm_patch_ram_length;) {
     uint8_t  length = brcm_patchram_buf[offset + 2];
     uint16_t opcode = (brcm_patchram_buf[offset + 0]) |
                       (brcm_patchram_buf[offset + 1] << 8);
@@ -130,6 +130,7 @@ HCIVirtualTransportZephyrClass::~HCIVirtualTransportZephyrClass() {
 }
 
 int HCIVirtualTransportZephyrClass::begin() {
+  k_fifo_init(&rx_queue);
   bt_enable_raw(__rx_queue);
 
 #if CONFIG_BT_HCI_SETUP
